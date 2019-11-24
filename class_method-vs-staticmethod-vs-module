@@ -1,0 +1,58 @@
+First the denifions - 
+@module - must have a class instance. Can access the instance namespace, no inheritance. Can access the variables through self, can read and change variables freely.
+@classmethod - doesn't need class instance. Can't access the instance (self) but can access (given) variable cls.
+@staticmethod - doesn't have access to the instance (self) or the class (cls).  
+
+Second a general example - 
+class Food:
+    def regular_method(self):
+        return 'This is a regular instance method'
+
+    @classmethod
+    def class_method(cls):
+        return 'This is a class method'
+
+    @staticmethod
+    def static_method():
+        return 'This is static method'
+
+f = Food()
+f.regular_method()      # This is a regular instance method
+f.class_method()        # This is a class method
+Food.static_method()    # This is static method
+
+
+And last a specific example ot show a suggestion how to apply the different options:
+class Meal:
+    def __init__(self, components, calories):
+        self.components = components
+        self.calories = calories
+
+    def __repr__(self):
+        return '{self.__class__.__name__}({self.components})'.format(self=self)
+
+    def __str__(self):
+        return 'The meal contains {self.components} and {self.calories})'.format(self=self)
+
+    def meal_in_joules(self):
+        return 'The meal produces {} Joules'.format(Meal.convert_calories_to_joules(self.calories))
+
+    @classmethod
+    def mc_meal(cls):
+        return cls(['cola', 'hamburger', 'fries'], 1500)
+
+
+    @classmethod
+    def veggie_meal(cls):
+        return cls(['cola', 'salad', 'eggs'], 750)
+
+    @staticmethod
+    def convert_calories_to_joules(calories=1):
+        return calories * 4.184
+
+
+m = Meal(['cola', 'hamburger', 'fries'], 1000)
+m.meal_in_joules()                                  # The meal produces 4184.0 Joules
+m.mc_meal()                                         # The meal contains ['cola', 'hamburger', 'fries'] and 1500)
+m.veggie_meal()                                     # The meal contains ['cola', 'salad', 'eggs'] and 750)
+Meal.convert_calories_to_joules(200)                # 836.8
