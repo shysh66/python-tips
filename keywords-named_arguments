@@ -1,0 +1,35 @@
+Here is some tidbit of Python trick that can be useful - keyword and default arguments.
+
+Say we have a function with a lot of arguments
+def printing_score(first_name, last_name, course_name, course_id, test_score):
+    print '''Student {} {} got {} in course '{}' ({}) '''.format(
+        first_name, last_name, test_score, course_name, course_id)
+        
+We have to remember the correct order of all of the arguments. Because a change causes a different outcome - 
+printing_score('John', 'Doe', 'Intro to Python', 123456, 87.6)
+Vs - 
+printing_score('John', 'Doe', 87.6, 'Intro to Python', 123456)
+
+Results in 
+>>> Student John Doe got 87.6 in course 'Intro to Python' (123456) 
+Instead os
+>>> Student John Doe got 123456 in course '87.6' (Intro to Python) 
+
+The way to fix it is to use the parameter name in the function call - 
+printing_score(first_name='John', last_name='Doe', test_score=87.6, 
+               course_name='Intro to Python', course_id=123456)
+               
+               
+This way we can use another good feature of Python - default values - 
+def printing_score(first_name, last_name, test_score, course_name='Intro To Python', course_id=123456):
+    if all([first_name, last_name, test_score]):
+        print '''Student {} {} got {} in course '{}' ({}) '''.format(
+            first_name, last_name, test_score, course_name, course_id)
+    else:
+        print 'No data'
+        
+        
+Now the function has a validation functionality but it's only relevant to 3 of the fields. Since course_name and course_id would never be None unless be declared so specifically by the user.
+printing_score(first_name='Jane', last_name='Doe', test_score=95.4)
+Results in 
+>>> Student Jane Doe got 95.4 in course 'Intro To Python' (123456)
